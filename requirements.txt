@@ -5,3 +5,5 @@ matplotlib
 seaborn
 psycopg2
 plotly
+feature_engine
+yellowbrick
