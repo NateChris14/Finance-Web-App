@@ -43,5 +43,7 @@ class DataIngestion:
             raise CustomException(e,sys)
 
 
-
-
+if __name__ == '__main__':
+    raw_path = os.path.join(os.getcwd(),'data','stock_cluster.csv')
+    obj = DataIngestion()
+    obj.initiate_data_ingestion()
