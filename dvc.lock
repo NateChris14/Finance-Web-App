@@ -1,0 +1,26 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python -m src.components.clustering.data_ingestion
+    deps:
+    - path: src/components/clustering/data_ingestion.py
+      hash: md5
+      md5: 54e510127deeb4fb9ca0ae0fbc7f88ee
+      size: 1629
+    - path: src/exception.py
+      hash: md5
+      md5: 9d3d2356ad88f815549cd3c510e6312f
+      size: 655
+    - path: src/logger.py
+      hash: md5
+      md5: f8239907ccfd29398ae2536feab4048f
+      size: 421
+    - path: src/utils.py
+      hash: md5
+      md5: 67af916b59d636e6bfd4b236f0b52303
+      size: 1507
+    outs:
+    - path: data/stock_cluster.csv
+      hash: md5
+      md5: 7c2aff6122d1cfe6ec91ce3f33c7ce88
+      size: 1564657

@@ -8,3 +8,5 @@ plotly
 feature_engine
 yellowbrick
 mlflow
+dvc
+dvc_s3
