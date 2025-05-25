@@ -43,6 +43,7 @@ class DataTransformation:
 
             logging.info(f"Columns : {columns}")
 
+
             preprocessor = ColumnTransformer(transformers=[
                 ("transform",transformer,columns)
             ])
@@ -67,8 +68,6 @@ class DataTransformation:
 
             input_feature_arr = preprocessor_obj.fit_transform(df)
 
-            arr = np.array(input_feature_arr)
-
             logging.info("Saving preprocessor object")
 
             save_object(
@@ -78,7 +77,7 @@ class DataTransformation:
             )
 
             return(
-                arr,
+                input_feature_arr,
                 self.data_transformation_config.preprocessor_ob_file_path
             )
         

@@ -77,7 +77,6 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
-        X = X.copy()
         X['date'] = pd.to_datetime(X['date'])
         X = X.sort_values(by=['ticker','date'])
 
