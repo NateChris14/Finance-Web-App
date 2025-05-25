@@ -24,3 +24,27 @@ stages:
       hash: md5
       md5: 7c2aff6122d1cfe6ec91ce3f33c7ce88
       size: 1564657
+  transform:
+    cmd: python -m src.components.clustering.data_transformation
+    deps:
+    - path: src/components/clustering/data_transformation.py
+      hash: md5
+      md5: 5c9e5716cf027de75976b5c8ea28ae3d
+      size: 2993
+    - path: src/exception.py
+      hash: md5
+      md5: 9d3d2356ad88f815549cd3c510e6312f
+      size: 655
+    - path: src/logger.py
+      hash: md5
+      md5: f8239907ccfd29398ae2536feab4048f
+      size: 421
+    - path: src/utils.py
+      hash: md5
+      md5: 372b7fa7319cc505d92ce4f13c3e38c7
+      size: 3165
+    outs:
+    - path: artifacts/preprocessor.pkl
+      hash: md5
+      md5: 083fba77dfc8e8ae70efd4ceafcf8246
+      size: 28973
