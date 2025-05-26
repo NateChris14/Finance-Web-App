@@ -35,7 +35,7 @@ class DataTransformation:
             transformer = Pipeline(steps=[
                 ("drop_duplicate_features",DropDuplicateFeatures()),
                 ("feature_engineering", FeatureEngineer()),
-                ("Outlier removal", Winsorizer(capping_method='iqr',tail='both',fold=1.5)),
+                ("Outlier removal", Winsorizer(capping_method='gaussian',tail='both',fold=2.5)),
                 ("Scaling",RobustScaler()),
                 ("Dimensionality Reduction",PCA(n_components=3))
                 

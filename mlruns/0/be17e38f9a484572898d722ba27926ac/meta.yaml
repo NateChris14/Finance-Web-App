@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/be17e38f9a484572898d722ba27926ac/artifacts
+end_time: 1748265202790
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: be17e38f9a484572898d722ba27926ac
+run_name: cluster_model_training
+run_uuid: be17e38f9a484572898d722ba27926ac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748265190403
+status: 3
+tags: []
+user_id: NATHAN

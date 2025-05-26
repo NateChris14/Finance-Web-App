@@ -33,14 +33,6 @@ class ModelTrainer:
                 #Initializing the model
                 AC = AgglomerativeClustering(n_clusters=4,linkage='ward')
 
-                #Fitting the model and predicting clusters
-                y_hat = AC.fit_predict(input_array)
-
-                reduced_dimension_df = pd.DataFrame(input_array,columns=['col1','col2','col3'])
-
-                #Storing the cluster predictions
-                reduced_dimension_df['Clusters'] = y_hat
-
                 #Adding the clusters feature to the original dataframe
 
                 #Creating the data ingestion object
@@ -49,6 +41,14 @@ class ModelTrainer:
                 
                 #Getting the dataframe 
                 df_update = pd.read_csv(path)
+
+                reduced_dimension_df = pd.DataFrame(input_array,columns=['col1','col2','col3'])
+
+                #Fitting the model and predicting clusters
+                y_hat = AC.fit_predict(input_array)
+
+                #Storing the cluster predictions
+                reduced_dimension_df['Clusters'] = y_hat
 
                 # Performing feature engineering before adding the cluster labels
                 fe = FeatureEngineer()
@@ -84,8 +84,7 @@ class ModelTrainer:
             
         except Exception as e:
             raise CustomException(e,sys)
-
-
+        
 if __name__ == '__main__':
     raw_data_path = os.path.join(os.getcwd(),'data','stock_cluster.csv')
     tf = DataTransformation()
@@ -93,6 +92,4 @@ if __name__ == '__main__':
     mt = ModelTrainer()
     score = mt.initiate_model_trainer(arr)
     print(score)
-
-
 
