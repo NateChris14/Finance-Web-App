@@ -85,11 +85,11 @@ class ModelTrainer:
         except Exception as e:
             raise CustomException(e,sys)
         
-if __name__ == '__main__':
-    raw_data_path = os.path.join(os.getcwd(),'data','stock_cluster.csv')
-    tf = DataTransformation()
-    arr,path = tf.initiate_data_transformation(raw_path=raw_data_path)
-    mt = ModelTrainer()
-    score = mt.initiate_model_trainer(arr)
-    print(score)
+#if __name__ == '__main__':
+    #raw_data_path = os.path.join(os.getcwd(),'data','stock_cluster.csv')
+    #tf = DataTransformation()
+    #arr,path = tf.initiate_data_transformation(raw_path=raw_data_path)
+    #mt = ModelTrainer()
+    #score = mt.initiate_model_trainer(arr)
+    #print(score)
 

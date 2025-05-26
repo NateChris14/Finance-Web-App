@@ -85,11 +85,11 @@ class DataTransformation:
             raise CustomException(e,sys)
         
 
-if __name__ == '__main__':
-    raw_data_path = os.path.join(os.getcwd(),'data','stock_cluster.csv')
-    obj = DataTransformation()
-    obj.get_data_transformer_object()
-    obj.initiate_data_transformation(raw_data_path)
+#if __name__ == '__main__':
+    #raw_data_path = os.path.join(os.getcwd(),'data','stock_cluster.csv')
+    #obj = DataTransformation()
+    #obj.get_data_transformer_object()
+    #obj.initiate_data_transformation(raw_data_path)
 
 
 
