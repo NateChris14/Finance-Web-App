@@ -7,17 +7,19 @@ from src.utils import load_object
 
 class PredictPipeline:
     def __init__(self):
-        model_path = 'artifact/model.pkl'
-        preprocessor_path = 'artifact/preprocessor.pkl'
+        model_path = 'artifacts/model.pkl'
+        preprocessor_path = 'artifacts/preprocessor.pkl'
         self.model = load_object(file_path=model_path)
         self.preprocessor = load_object(file_path=preprocessor_path)
 
     def predict_clusters(self, df: pd.DataFrame) -> pd.DataFrame:
-        try:
-            features = df.columns
-            data_scaled = self.preprocessor.transform(features)
-            clusters = self.model.predict(data_scaled)
-            df['cluster'] = clusters
-            return df
-        except Exception as e:
-            raise CustomException(e,sys) 
+
+        # Transforming the data
+        transformed = self.preprocessor.transform(df)
+        clusters = self.model.fit_predict(transformed)
+
+        #Storing the 3d data to be visualised
+        df_3d = pd.DataFrame(transformed,columns=['col1','col2','col3'])
+        df_3d['clusters'] = clusters
+
+        return df_3d
