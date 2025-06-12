@@ -13,3 +13,4 @@ dvc_s3
 dash
 dash_bootstrap_components
 flask_cors
+gunicorn
