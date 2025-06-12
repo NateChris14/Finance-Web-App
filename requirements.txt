@@ -14,3 +14,4 @@ dash
 dash_bootstrap_components
 flask_cors
 gunicorn
+python-dotenv

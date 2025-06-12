@@ -26,7 +26,6 @@ def get_requirements(file_path:str)->List[str]:
     return requirements
 
 setup(
-
     name = 'finance_web_app',
     version = '0.1',
     author = 'Nathan',

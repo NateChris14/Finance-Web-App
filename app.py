@@ -5,14 +5,8 @@ from flask_cors import CORS
 import json
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
-
-# Try to import your custom modules, with fallbacks
-try:
-    from src.utils import load_data, FeatureEngineer
-    from src.components.clustering.pipeline.predict_pipeline import PredictPipeline
-except ImportError as e:
-    print(f"⚠️  Warning: Could not import custom modules: {e}")
-    print("🔄 Using simplified data generation...")
+from src.utils import load_data, FeatureEngineer
+from src.components.clustering.pipeline.predict_pipeline import PredictPipeline
 
 # ========================================
 # 🔄 DATA LOADING AND PREPROCESSING
