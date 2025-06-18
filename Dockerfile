@@ -15,10 +15,12 @@ ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV PORT=8050
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 #Exposing the port
 EXPOSE 8050
 
 #Running the flask app with memory-efficient settings
-CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--workers", "1", "--timeout", "120", "--max-requests", "1000", "--max-requests-jitter", "100", "app:server"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--workers", "1", "--threads", "2", "--timeout", "300", "--max-requests", "100", "--max-requests-jitter", "10", "--preload", "app:server"]
 
