@@ -20,5 +20,5 @@ ENV PORT=8050
 EXPOSE 8050
 
 #Running the flask app
-CMD ["gunicorn","-w","4","-b","0.0.0.0:8050","app:server"]
+CMD ["gunicorn","-w","1","-b","0.0.0.0:8050","app:server"]
 
