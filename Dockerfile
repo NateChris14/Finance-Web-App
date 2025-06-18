@@ -19,6 +19,6 @@ ENV PORT=8050
 #Exposing the port
 EXPOSE 8050
 
-#Running the flask app
-CMD ["gunicorn","-w","1","-b","0.0.0.0:8050","app:server"]
+#Running the flask app with memory-efficient settings
+CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--workers", "1", "--timeout", "120", "--max-requests", "1000", "--max-requests-jitter", "100", "app:server"]
 
