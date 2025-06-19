@@ -14,10 +14,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker image
-        run: docker build -t my-frontend .
+        run: docker build -t my-frontend ./frontend
         
-      - name: Run tests (optional)
-        run: docker run --rm my-frontend npm test  # if applicable
+      - name: Run tests
+        run: docker run --rm my-frontend npm test  
 
       - name: Trigger Render Deploy Hook
         run: |
