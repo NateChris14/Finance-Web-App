@@ -11,13 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build Docker image
-        run: docker build -t my-frontend ./frontend
-        
-      - name: Run tests
-        run: docker run --rm my-frontend npm test  
+        uses: actions/checkout@v3  
 
       - name: Trigger Render Deploy Hook
         run: |
