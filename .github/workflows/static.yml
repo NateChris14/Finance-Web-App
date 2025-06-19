@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Build Docker image
+        run: docker build -t my-frontend .
+        
+      - name: Run tests (optional)
+        run: docker run --rm my-frontend npm test  # if applicable
+
       - name: Trigger Render Deploy Hook
         run: |
           curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        
