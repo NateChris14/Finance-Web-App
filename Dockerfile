@@ -22,5 +22,5 @@ ENV PYTHONDONTWRITEBYTECODE=1
 EXPOSE 8050
 
 #Running the flask app with memory-efficient settings
-CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--workers", "1", "--threads", "2", "--timeout", "300", "--max-requests", "100", "--max-requests-jitter", "10", "--preload", "app:server"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:8050", "app:server"]
 
