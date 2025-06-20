@@ -1,0 +1,78 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python -m src.components.clustering.data_ingestion
+    deps:
+    - path: src/components/clustering/data_ingestion.py
+      hash: md5
+      md5: 498c8220fc77cee581c6b7585e642178
+      size: 1694
+    - path: src/exception.py
+      hash: md5
+      md5: 9d3d2356ad88f815549cd3c510e6312f
+      size: 655
+    - path: src/logger.py
+      hash: md5
+      md5: f8239907ccfd29398ae2536feab4048f
+      size: 421
+    - path: src/utils.py
+      hash: md5
+      md5: 8678bc6d563d7ce51c410bfcc9d359ec
+      size: 3369
+    outs:
+    - path: data/stock_cluster.csv
+      hash: md5
+      md5: d22758958deacb8332a5b22667b1179f
+      size: 1564657
+  transform:
+    cmd: python -m src.components.clustering.data_transformation
+    deps:
+    - path: src/components/clustering/data_transformation.py
+      hash: md5
+      md5: 303b58131e159b16a7b57c578ac221d3
+      size: 2976
+    - path: src/exception.py
+      hash: md5
+      md5: 9d3d2356ad88f815549cd3c510e6312f
+      size: 655
+    - path: src/logger.py
+      hash: md5
+      md5: f8239907ccfd29398ae2536feab4048f
+      size: 421
+    - path: src/utils.py
+      hash: md5
+      md5: 8678bc6d563d7ce51c410bfcc9d359ec
+      size: 3369
+    outs:
+    - path: artifacts/clustering/preprocessor.pkl
+      hash: md5
+      md5: 7fe8df3a6ef59ecf7bdf64c2f20c8669
+      size: 28879
+  train:
+    cmd: python -m src.components.clustering.model_trainer
+    deps:
+    - path: src/components/clustering/data_ingestion.py
+      hash: md5
+      md5: 498c8220fc77cee581c6b7585e642178
+      size: 1694
+    - path: src/components/clustering/data_transformation.py
+      hash: md5
+      md5: 303b58131e159b16a7b57c578ac221d3
+      size: 2976
+    - path: src/exception.py
+      hash: md5
+      md5: 9d3d2356ad88f815549cd3c510e6312f
+      size: 655
+    - path: src/logger.py
+      hash: md5
+      md5: f8239907ccfd29398ae2536feab4048f
+      size: 421
+    - path: src/utils.py
+      hash: md5
+      md5: 8678bc6d563d7ce51c410bfcc9d359ec
+      size: 3369
+    outs:
+    - path: artifacts/clustering/model.pkl
+      hash: md5
+      md5: 0bc65e85e1f1cefee959661aa9a0621e
+      size: 285694

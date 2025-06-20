@@ -1,0 +1,33 @@
+stages:
+  ingest:
+    cmd: python -m src.components.clustering.data_ingestion
+    deps:
+      - src/components/clustering/data_ingestion.py
+      - src/utils.py
+      - src/exception.py
+      - src/logger.py
+    outs:
+      - data/stock_cluster.csv
+  
+  transform:
+    cmd: python -m src.components.clustering.data_transformation
+    deps:
+      - src/components/clustering/data_transformation.py
+      - src/utils.py
+      - src/exception.py
+      - src/logger.py
+
+    outs:
+      - artifacts/clustering/preprocessor.pkl
+
+  train:
+    cmd: python -m src.components.clustering.model_trainer
+    deps:
+      - src/components/clustering/data_transformation.py
+      - src/components/clustering/data_ingestion.py
+      - src/logger.py
+      - src/exception.py
+      - src/utils.py
+
+    outs:
+      - artifacts/clustering/model.pkl
