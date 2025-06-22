@@ -4,7 +4,7 @@ def test_dashboard_loads_and_interactions():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto("http://localhost:8000")
+        page.goto("http://localhost:80")
         try:
             page.wait_for_selector("#ticker-select", timeout=20000)
         except Exception:
