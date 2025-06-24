@@ -1,6 +1,6 @@
 // API Configuration
 const API_CONFIG = {
-    baseURL: 'http://localhost:8050',
+    baseURL: '',
     timeout: 10000,
     retryAttempts: 3,
     retryDelay: 1000
