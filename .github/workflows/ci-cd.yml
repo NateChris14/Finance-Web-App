@@ -3,7 +3,7 @@ name: Deploy to ECS
 on:
   push:
     branches:
-      - main  # or your deployment branch
+      - main  
 
 env:
   AWS_REGION: eu-north-1
