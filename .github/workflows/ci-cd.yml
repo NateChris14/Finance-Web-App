@@ -5,6 +5,11 @@ on:
     branches:
       - main  # or your deployment branch
 
+env:
+  AWS_REGION: eu-north-1
+  ECR_FRONTEND: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/frontend-repo
+  ECR_BACKEND: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-north-1.amazonaws.com/backend-repo
+
 jobs:
   deploy:
     name: Deploy to Amazon ECS
@@ -19,7 +24,21 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Build and push frontend Docker image
+        run: |
+          docker build -t $ECR_FRONTEND:latest ./frontend
+          docker push $ECR_FRONTEND:latest
+
+      - name: Build and push backend Docker image
+        run: |
+          docker build -t $ECR_BACKEND:latest ./backend
+          docker push $ECR_BACKEND:latest
 
       - name: Download and clean ECS task definition
         run: |
@@ -46,8 +65,8 @@ jobs:
 
       - name: Replace image URIs in task definition
         run: |
-          jq --arg FRONTEND_IMAGE "020759835805.dkr.ecr.eu-north-1.amazonaws.com/frontend-repo:latest" \
-             --arg BACKEND_IMAGE "020759835805.dkr.ecr.eu-north-1.amazonaws.com/backend-repo:latest" \
+          jq --arg FRONTEND_IMAGE "$ECR_FRONTEND:latest" \
+             --arg BACKEND_IMAGE "$ECR_BACKEND:latest" \
              '.containerDefinitions |= map(
                 if .name == "frontend" then .image = $FRONTEND_IMAGE
                 elif .name == "backend" then .image = $BACKEND_IMAGE
