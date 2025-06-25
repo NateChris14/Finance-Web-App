@@ -59,9 +59,9 @@ jobs:
               runtimePlatform: runtimePlatform
             }' > task-def.json
 
-      - name: Sanitize null fields in task definition
+      - name: Sanitize null or empty tags in task definition
         run: |
-          jq 'if .tags == null then .tags = [] else . end' task-def.json > task-def-clean.json
+          jq 'if (.tags == null) or (.tags | length == 0) then del(.tags) else . end' task-def.json > task-def-clean.json
 
       - name: Replace image URIs in task definition
         run: |
