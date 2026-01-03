@@ -12,6 +12,15 @@ A full-stack finance web application for stock clustering, analysis, and visuali
 
 Watch a quick demo of the Stock Intelligence Dashboard in action:
 
+
+![Example view 1](https://github.com/NateChris14/Formula-1-Pitstop-Generator/blob/main/home-page.png)
+
+
+![Example view 2](https://github.com/NateChris14/Formula-1-Pitstop-Generator/blob/main/main-page.png)
+
+
+![Example view 3](https://github.com/NateChris14/Formula-1-Pitstop-Generator/blob/main/main-page.png)
+
 Alternatively, you can view the demo here: [Project Demo Video](https://www.youtube.com/watch?v=iKAZkYRPa68)
 
 ## Features
@@ -122,4 +131,5 @@ Contributions are welcome! Please open issues or submit pull requests for improv
 
 ## License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
 
