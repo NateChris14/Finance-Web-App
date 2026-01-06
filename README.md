@@ -6,7 +6,7 @@
 
 # Finance Web App
 
-A full-stack finance web application for stock clustering, analysis, and visualization. This project leverages machine learning to cluster stocks and provides an interactive frontend for users to explore financial data and insights.
+A full-stack finance web application that **consumes data produced by the Stock Anomaly ETL pipeline** (Airflow) and reads from a PostgreSQL database hosted on AWS RDS to power stock analysis, clustering, and interactive visualization.
 
 ## 🎬 Project Demo
 
@@ -31,25 +31,79 @@ Alternatively, you can view the demo here: [Project Demo Video](https://www.yout
 - **Experiment Tracking:** MLflow integration for tracking experiments and model artifacts.
 - **Testing Suite:** Automated tests for both backend and frontend components.
 
+## Architecture
+This application is designed to sit on top of an upstream ETL pipeline that loads market + macro data into PostgreSQL on AWS RDS, then serves it through a containerized backend API and a frontend dashboard deployed on AWS.
+
+![Deployment Architecture](https://github.com/NateChris14/Finance-Web-App/blob/main/Deployment%20Architecture%20(Stock).png)
+
+### Key components
+- **Upstream ETL (Astronomer/Airflow):** Loads stock prices, technical indicators, and macro indicators into PostgreSQL (AWS RDS).
+- **AWS RDS (PostgreSQL):** Primary database used by the web app backend.
+- **Backend API (Flask):** Reads from PostgreSQL and exposes REST endpoints consumed by the frontend.
+- **Frontend (HTML/CSS/JS):** Dashboard UI that calls the backend API.
+- **CI/CD (GitHub Actions):** Builds/tests and pushes Docker images.
+- **Amazon ECR:** Stores backend and frontend Docker images.
+- **Amazon ECS (Fargate):** Runs the containers as tasks/services.
+
+## Data dependency (ETL → DB → App)
+This project expects the database to already contain curated tables produced by the **Stock Anomaly ETL** project.
+
+Before running this app, ensure:
+- The ETL pipeline has successfully populated your AWS RDS PostgreSQL instance.
+- You know which schema/table names the backend queries (document them below once finalized).
+
+### Expected inputs
+- Upstream ETL repo: `https://github.com/NateChris14/FinanceApp`
+- Database: AWS RDS PostgreSQL
+- Schema/tables used by this app:
+  - `stock_data` (e.g., daily prices)
+  - `technical_indicators` (e.g., indicators)
+  - `macro_indicators` (e.g., macro series)
+- Refresh cadence: `daily` (recommended)
+
 ## Tech Stack
-- **Backend:** Python, FastAPI/Flask (inferred), scikit-learn, pandas, MLflow
+- **Backend:** Python 3.8+, Flask (inferred), scikit-learn, pandas, MLflow, SQLAlchemy
 - **Frontend:** JavaScript, HTML, CSS
+- **Database:** PostgreSQL (AWS RDS)
 - **Containerization:** Docker, Docker Compose
-- **Experiment Tracking:** MLflow
+- **CI/CD:** Github Actions
 - **Testing:** pytest (backend), Jest or similar (frontend)
 
 ## Setup & Installation
 
 ### Prerequisites
 - Python 3.8+
-- Node.js & npm (for frontend)
-- Docker & Docker Compose (optional, for containerized setup)
+- Docker & Docker Compose (recommended for consistent local runs)
 
 ### Clone the Repository
 ```bash
-git clone <repo-url>
-cd FINAPP
+git clone https://github.com/NateChris14/Finance-Web-App.git
+cd Finance-Web-App
 ```
+
+## Configuration
+
+### Backend environment variables (required)
+
+Configure these as environment variables (recommended) or via a secrets manager in production:
+
+- DB_HOST = <aws-rds-endpoint>
+- DB_PORT = 5432
+- DB_NAME = <database-name>
+- DB_USER = <username>
+- DB_PASSWORD = <password>
+
+### Running locally
+
+#### Option A (recommended): Run using Docker Compose
+
+This starts the backend and frontend containers. The backend container must be able to reach AWS RDS (networking/security group must allow it).
+
+```bash
+docker compose up --build
+```
+
+#### Option B:  Run backend + frontend without Docker
 
 ### Backend Setup
 ```bash
@@ -80,11 +134,44 @@ npm start
 # Or open index.html directly in your browser
 ```
 
-### Using Docker (Recommended)
+## MLflow & Artifacts
+
+- Ensure MLFLOW_TRACKING_URI is configured (local file store or remote server).
+- MLflow runs and artifacts are stored in `mlruns/` and `mlartifacts/`.
+- To view the MLflow UI:
 ```bash
-docker-compose up --build
+mlflow ui
 ```
-This will start both backend and frontend services.
+
+## Deployment (AWS ECS Fargate)
+
+This project is containerized and deployed to AWS using:
+
+- Docker images built for backend and frontend
+- Images pushed to Amazon ECR
+- Services/tasks running on Amazon ECS (Fargate)
+
+High-level steps:
+
+- Create ECR repositories
+  - finance-web-app-backend (example)
+  - finance-web-app-frontend (example)
+
+- Build Docker images
+  - Build backend and frontend images using their Dockerfiles (or via Docker Compose).
+
+- Push images to ECR
+  - Authenticate Docker to ECR using AWS CLI.
+  - Tag and push both images to the correct ECR repositories.
+
+- Create ECS cluster + task definitions
+  - Define one service/task for backend and one for frontend (or a combined task if you run them together).
+  - Configure environment variables/secrets for the backend DB connection.
+  - Configure networking/security groups to allow backend → RDS connectivity.
+
+- CI/CD with GitHub Actions
+  - On pushes to main, GitHub Actions builds/tests and pushes updated images to ECR.
+  - Then your workflow updates ECS to deploy the new task definition/image tags.
 
 ## Project Structure
 ```
@@ -119,59 +206,12 @@ cd frontend
 npm test
 ```
 
-## MLflow & Artifacts
-- MLflow runs and artifacts are stored in `mlruns/` and `mlartifacts/`.
-- To view the MLflow UI:
-```bash
-mlflow ui
-```
-
-## Deployment 
-
-This project has been containerized using Docker and deployed to AWS ECS (Fargate). Below are the steps for deploying the application:
-
-## 📊 Deployment Architecture
-
-Below is the architecture used to deploy the Stock Intelligence Dashboard:
-
-![Deployment Architecture](https://github.com/NateChris14/Finance-Web-App/blob/main/Deployment%20Architecture%20(Stock).png)
-
-**Key components:**
-- **AWS ECS (Fargate)**: For running containerized Flask app.
-- **AWS ECR**: For storing the Docker images.
-- **GitHub Actions**: For CI/CD pipeline to automatically deploy the app.
-- **Flask App**: Exposes the dashboard to users via a web interface.
-- **Docker**: Containerizes the application for deployment consistency across environments.
-
-
-1. Dockerize the frontend and backend: Ensure the Dockerfiles are correctly set up in your project folder. Then build the Docker images:
-
-```bash
-docker build -t f1-pitstop-prediction .
-```
-
-2. Push Docker image to AWS ECR: Follow the steps to push your Docker image to AWS ECR:
-
-* Create a repository on AWS ECR.
-
-* Authenticate Docker to AWS using the AWS CLI.
-
-* Push the image to ECR.
-
-3. Set up AWS ECS:
-
-* Create an ECS Cluster and Task Definition.
-
-* Deploy your app using ECS Fargate.
-
-4. Set up CI/CD with GitHub Actions: GitHub Actions will automatically deploy updates to AWS ECS whenever changes are pushed to the main branch.
-
-
 ## Contributing
 Contributions are welcome! Please open issues or submit pull requests for improvements, bug fixes, or new features.
 
 ## License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
 
 
 
