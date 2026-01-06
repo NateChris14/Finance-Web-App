@@ -36,6 +36,29 @@ This application is designed to sit on top of an upstream ETL pipeline that load
 
 ![Deployment Architecture](https://github.com/NateChris14/Finance-Web-App/blob/main/Deployment%20Architecture%20(Stock).png)
 
+## Database design (ETL output)
+
+This web app is a **consumer** of the PostgreSQL schema produced by the Stock Anomaly ETL pipeline (loaded into AWS RDS in production). [file:55][file:89]  
+The backend API queries these tables to serve analytics, clustering features, and dashboard visualizations. [file:55]
+
+### Schema overview
+
+![Logical DB design](https://github.com/NateChris14/FinanceApp/blob/main/Stock%20data%20DB-Logical%20Design.drawio.png) [file:89]
+
+
+### Required tables
+The app expects the following tables (or equivalent views) to exist and be populated: [file:89]
+- `stock_data` keyed by `(ticker, date)` with OHLCV fields. [file:89]
+- `technical_indicators` keyed by `(ticker, date)` with indicator fields (RSI/MACD/SMA/EMA/ATR/Bollinger Bands). [file:89]
+- `macro_indicators` keyed by `(indicator, date)` with a numeric `value`. [file:89]
+
+### Recommended join patterns
+- Prices + indicators: join `stock_data` ↔ `technical_indicators` on `(ticker, date)`. [file:89]
+- Macro context: join `macro_indicators` to ticker-level datasets by `date` (filter by `indicator` as needed). [file:89]
+
+> For the canonical schema and definitions, see the ETL repository’s “Database schema” section.
+
+
 ### Key components
 - **Upstream ETL (Astronomer/Airflow):** Loads stock prices, technical indicators, and macro indicators into PostgreSQL (AWS RDS).
 - **AWS RDS (PostgreSQL):** Primary database used by the web app backend.
@@ -211,6 +234,7 @@ Contributions are welcome! Please open issues or submit pull requests for improv
 
 ## License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
 
 
 
